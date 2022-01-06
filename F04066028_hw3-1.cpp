@@ -9,6 +9,7 @@ using namespace std;
 
 vector<int> load_binary_tree(ifstream &);
 void print(const vector<int> &);
+int search(const int &x, const vector<int> &);
 
 int main(void)
 {
@@ -45,6 +46,16 @@ int main(void)
     }
 
     return 0;
+}
+
+int search(const int &x, const vector<int> &tree)
+{
+    for (int i = 0; i < tree.size(); ++i)
+    {
+        if (tree.at(i) == x)
+            return i;
+    }
+    return -1;
 }
 
 vector<int> load_binary_tree(ifstream &inFile)
