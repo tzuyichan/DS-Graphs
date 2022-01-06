@@ -12,4 +12,4 @@ $(GCC)1: $(FILENAME)1.cpp
 	$(GCC) $^ -o 1 $(CXXFLAGS)
 
 clean:
-	rm *.o 1
+	rm *.o 1 2 3 4 5
