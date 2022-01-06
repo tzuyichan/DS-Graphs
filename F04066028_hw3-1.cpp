@@ -7,7 +7,7 @@
 
 using namespace std;
 
-vector<int> load_binary_tree(ifstream &, const int &);
+vector<int> load_binary_tree(ifstream &);
 void print(const vector<int> &);
 
 int main(void)
@@ -16,6 +16,7 @@ int main(void)
 
     cout << "Input filename: ";
     cin >> filename;
+
     // Read file.
     ifstream inFile(filename, ios::in);
     if (!inFile)
@@ -30,12 +31,15 @@ int main(void)
 
     for (int i = 0; i < n_datasets; ++i)
     {
-        string order;
+        // get input file contents
+        string order; // problem type
         getline(inFile, order);
+        cout << order << "\n";
         getline(inFile, line);
-        int n_nodes = line.at(0) - '0';
-        vector<int> porder = load_binary_tree(inFile, n_nodes);
-        vector<int> inorder = load_binary_tree(inFile, n_nodes);
+        int n_nodes = stoi(line); // number of nodes
+        cout << n_nodes << "\n";
+        vector<int> porder = load_binary_tree(inFile);
+        vector<int> inorder = load_binary_tree(inFile);
         print(porder);
         print(inorder);
     }
@@ -43,7 +47,7 @@ int main(void)
     return 0;
 }
 
-vector<int> load_binary_tree(ifstream &inFile, const int &n_nodes)
+vector<int> load_binary_tree(ifstream &inFile)
 {
     string line;
     vector<int> tree;
