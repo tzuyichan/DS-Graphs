@@ -11,6 +11,7 @@ vector<int> load_binary_tree(ifstream &);
 void print(const vector<int> &);
 int search(const int &x, const vector<int> &);
 void print_preorder(const vector<int> &, const vector<int> &);
+void print_postorder(const vector<int> &, const vector<int> &);
 
 int main(void)
 {
@@ -42,6 +43,11 @@ int main(void)
         vector<int> inorder = load_binary_tree(inFile);
 
         // print order conversion
+        if (order == "preorder-inorder")
+        {
+            print_postorder(porder, inorder);
+            cout << "\n";
+        }
         if (order == "postorder-inorder")
         {
             print_preorder(porder, inorder);
@@ -82,6 +88,27 @@ void print_preorder(const vector<int> &post, const vector<int> &in)
         vector<int> sub_in(in.begin() + root_idx + 1, in.end());
         print_preorder(sub_post, sub_in);
     }
+}
+
+void print_postorder(const vector<int> &pre, const vector<int> &in)
+{
+    int root_idx = search(pre.at(0), in);
+
+    if (root_idx != 0)
+    {
+        vector<int> sub_pre(pre.begin() + 1, pre.end());
+        vector<int> sub_in(in.begin(), in.begin() + root_idx);
+        print_postorder(sub_pre, sub_in);
+    }
+
+    if (root_idx != in.size() - 1)
+    {
+        vector<int> sub_pre(pre.begin() + root_idx + 1, pre.end());
+        vector<int> sub_in(in.begin() + root_idx + 1, in.end());
+        print_postorder(sub_pre, sub_in);
+    }
+
+    cout << pre.at(0) << " ";
 }
 
 vector<int> load_binary_tree(ifstream &inFile)
