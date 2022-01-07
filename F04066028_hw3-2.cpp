@@ -27,7 +27,7 @@ int main(void)
 
     // get number of problem datasets
     getline(inFile, line);
-    int n_datasets = line.at(0) - '0';
+    int n_datasets = stoi(line);
 
     // open output file
     ofstream outFile("output.txt", ios::out);
