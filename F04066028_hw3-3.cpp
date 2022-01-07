@@ -3,10 +3,11 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <queue>
 
 using namespace std;
 
-// void dfs(const int &, const vector<vector<bool>> &, vector<bool> &, ofstream &);
+void bfs(const int &, const vector<vector<bool>> &, vector<bool> &, ofstream &);
 vector<vector<bool>> load_adjacency_matrix(ifstream &, const int &);
 void print(const vector<vector<bool>> &);
 
@@ -44,42 +45,52 @@ int main(void)
         stringstream sstream(line);
         getline(sstream, line, ' ');
         int n_vertices = stoi(line);
-        cout << n_vertices << endl;
         getline(sstream, line, ' ');
         int start = stoi(line);
-        cout << start << endl;
 
         // load matrices
         vector<vector<bool>> adjacency = load_adjacency_matrix(inFile, n_vertices);
         vector<bool> visited(n_vertices, false);
 
-        // dfs
-        // dfs(start, adjacency, visited, outFile);
+        // bfs
+        bfs(start, adjacency, visited, outFile);
         outFile << endl;
     }
 
     return 0;
 }
 
-// void dfs(const int &start,
-//          const vector<vector<bool>> &adjacency,
-//          vector<bool> &visited,
-//          ofstream &outFile)
-// {
-//     // mark current node as visited
-//     outFile << start << " ";
-//     visited.at(start) = true;
+void bfs(const int &start,
+         const vector<vector<bool>> &adjacency,
+         vector<bool> &visited,
+         ofstream &outFile)
+{
+    queue<int> q;
 
-//     // explore adjacent nodes
-//     for (int i = 0; i < adjacency.at(0).size(); ++i)
-//     {
-//         // find unexplored adjacent node
-//         if (adjacency.at(start).at(i) == true && !visited.at(i))
-//         {
-//             dfs(i, adjacency, visited, outFile);
-//         }
-//     }
-// }
+    // mark starting node as visited
+    q.push(start);
+    visited.at(start) = true;
+
+    while (!q.empty())
+    {
+        // add current node to traversed list
+        int current = q.front();
+        outFile << current << " ";
+        q.pop();
+
+        // explore adjacent nodes
+        for (int i = 0; i < adjacency.at(0).size(); ++i)
+        {
+            // find unexplored adjacent node
+            if (adjacency.at(current).at(i) == true && !visited.at(i))
+            {
+                // push into to-be-traversed queue
+                q.push(i);
+                visited.at(i) = true;
+            }
+        }
+    }
+}
 
 vector<vector<bool>> load_adjacency_matrix(ifstream &inFile, const int &n_vertices)
 {
@@ -98,7 +109,6 @@ vector<vector<bool>> load_adjacency_matrix(ifstream &inFile, const int &n_vertic
         }
     }
 
-    print(matrix);
     return matrix;
 }
 
