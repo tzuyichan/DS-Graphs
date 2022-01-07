@@ -6,6 +6,7 @@
 
 using namespace std;
 
+void dfs(const int &, const vector<vector<bool>> &, vector<bool> &);
 vector<vector<bool>> load_adjacency_matrix(ifstream &, const int &);
 void print(const vector<vector<bool>> &);
 
@@ -44,13 +45,37 @@ int main(void)
         getline(sstream, line, ' ');
         int n_vertices = stoi(line);
         getline(sstream, line, ' ');
-        int start_idx = stoi(line);
+        int start = stoi(line);
 
-        // load adjacency matrix
-        vector<vector<bool>> matrix = load_adjacency_matrix(inFile, n_vertices);
+        // load matrices
+        vector<vector<bool>> adjacency = load_adjacency_matrix(inFile, n_vertices);
+        vector<bool> visited(n_vertices, false);
+
+        // dfs
+        dfs(start, adjacency, visited);
+        cout << endl;
     }
 
     return 0;
+}
+
+void dfs(const int &start,
+         const vector<vector<bool>> &adjacency,
+         vector<bool> &visited)
+{
+    // mark current node as visited
+    cout << start << " ";
+    visited.at(start) = true;
+
+    // explore adjacent nodes
+    for (int i = 0; i < adjacency.at(0).size(); ++i)
+    {
+        // find unexplored adjacent node
+        if (adjacency.at(start).at(i) == true && !visited.at(i))
+        {
+            dfs(i, adjacency, visited);
+        }
+    }
 }
 
 vector<vector<bool>> load_adjacency_matrix(ifstream &inFile, const int &n_vertices)
