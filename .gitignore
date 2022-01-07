@@ -39,3 +39,4 @@
 # Mac Specific
 .DS_Store
 testcases/
+*.txt
