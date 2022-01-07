@@ -6,7 +6,7 @@
 
 using namespace std;
 
-void dfs(const int &, const vector<vector<bool>> &, vector<bool> &);
+void dfs(const int &, const vector<vector<bool>> &, vector<bool> &, ofstream &);
 vector<vector<bool>> load_adjacency_matrix(ifstream &, const int &);
 void print(const vector<vector<bool>> &);
 
@@ -52,8 +52,8 @@ int main(void)
         vector<bool> visited(n_vertices, false);
 
         // dfs
-        dfs(start, adjacency, visited);
-        cout << endl;
+        dfs(start, adjacency, visited, outFile);
+        outFile << endl;
     }
 
     return 0;
@@ -61,10 +61,11 @@ int main(void)
 
 void dfs(const int &start,
          const vector<vector<bool>> &adjacency,
-         vector<bool> &visited)
+         vector<bool> &visited,
+         ofstream &outFile)
 {
     // mark current node as visited
-    cout << start << " ";
+    outFile << start << " ";
     visited.at(start) = true;
 
     // explore adjacent nodes
@@ -73,7 +74,7 @@ void dfs(const int &start,
         // find unexplored adjacent node
         if (adjacency.at(start).at(i) == true && !visited.at(i))
         {
-            dfs(i, adjacency, visited);
+            dfs(i, adjacency, visited, outFile);
         }
     }
 }
