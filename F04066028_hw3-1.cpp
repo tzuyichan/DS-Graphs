@@ -10,8 +10,8 @@ using namespace std;
 vector<int> load_binary_tree(ifstream &);
 void print(const vector<int> &);
 int search(const int &x, const vector<int> &);
-void print_preorder(const vector<int> &, const vector<int> &);
-void print_postorder(const vector<int> &, const vector<int> &);
+void print_preorder(const vector<int> &, const vector<int> &, ofstream &);
+void print_postorder(const vector<int> &, const vector<int> &, ofstream &);
 
 int main(void)
 {
@@ -20,7 +20,7 @@ int main(void)
     cout << "Input filename: ";
     cin >> filename;
 
-    // Read file.
+    // read file
     ifstream inFile("./testcases/3-1/" + filename, ios::in);
     if (!inFile)
     {
@@ -31,6 +31,14 @@ int main(void)
     // get number of problem datasets
     getline(inFile, line);
     int n_datasets = line.at(0) - '0';
+
+    // open output file
+    ofstream outFile("output.txt", ios::out);
+    if (!outFile)
+    {
+        cerr << "Failed to write to output\n";
+        exit(EXIT_FAILURE); // exit program if failed to write file
+    }
 
     for (int i = 0; i < n_datasets; ++i)
     {
@@ -45,13 +53,13 @@ int main(void)
         // print order conversion
         if (order == "preorder-inorder")
         {
-            print_postorder(porder, inorder);
-            cout << "\n";
+            print_postorder(porder, inorder, outFile);
+            outFile << endl;
         }
         if (order == "postorder-inorder")
         {
-            print_preorder(porder, inorder);
-            cout << "\n";
+            print_preorder(porder, inorder, outFile);
+            outFile << endl;
         }
     }
 
@@ -68,29 +76,29 @@ int search(const int &x, const vector<int> &tree)
     return -1;
 }
 
-void print_preorder(const vector<int> &post, const vector<int> &in)
+void print_preorder(const vector<int> &post, const vector<int> &in, ofstream &outFile)
 {
     int root_idx = search(post.back(), in);
     int rsubtree_len = post.size() - root_idx - 1;
 
-    cout << post.back() << " ";
+    outFile << post.back() << " ";
 
     if (root_idx != 0)
     {
         vector<int> sub_post(post.begin(), post.end() - rsubtree_len - 1);
         vector<int> sub_in(in.begin(), in.begin() + root_idx);
-        print_preorder(sub_post, sub_in);
+        print_preorder(sub_post, sub_in, outFile);
     }
 
     if (root_idx != in.size() - 1)
     {
         vector<int> sub_post(post.end() - rsubtree_len - 1, post.end() - 1);
         vector<int> sub_in(in.begin() + root_idx + 1, in.end());
-        print_preorder(sub_post, sub_in);
+        print_preorder(sub_post, sub_in, outFile);
     }
 }
 
-void print_postorder(const vector<int> &pre, const vector<int> &in)
+void print_postorder(const vector<int> &pre, const vector<int> &in, ofstream &outFile)
 {
     int root_idx = search(pre.at(0), in);
 
@@ -98,17 +106,17 @@ void print_postorder(const vector<int> &pre, const vector<int> &in)
     {
         vector<int> sub_pre(pre.begin() + 1, pre.end());
         vector<int> sub_in(in.begin(), in.begin() + root_idx);
-        print_postorder(sub_pre, sub_in);
+        print_postorder(sub_pre, sub_in, outFile);
     }
 
     if (root_idx != in.size() - 1)
     {
         vector<int> sub_pre(pre.begin() + root_idx + 1, pre.end());
         vector<int> sub_in(in.begin() + root_idx + 1, in.end());
-        print_postorder(sub_pre, sub_in);
+        print_postorder(sub_pre, sub_in, outFile);
     }
 
-    cout << pre.at(0) << " ";
+    outFile << pre.at(0) << " ";
 }
 
 vector<int> load_binary_tree(ifstream &inFile)
