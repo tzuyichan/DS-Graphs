@@ -32,6 +32,14 @@ int main(void)
         exit(EXIT_FAILURE); // exit program if failed to read file
     }
 
+    // open output file
+    ofstream outFile("output.txt", ios::out);
+    if (!outFile)
+    {
+        cerr << "Failed to write to output\n";
+        exit(EXIT_FAILURE); // exit program if failed to write file
+    }
+
     // get first line
     getline(inFile, line);
     stringstream sstream(line);
@@ -85,6 +93,7 @@ int main(void)
     {
         sum += mst[i][COST];
     }
+    outFile << sum;
 
     return 0;
 }
