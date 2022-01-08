@@ -36,4 +36,4 @@ $(GCC)5: $(FILENAME)5.cpp
 	$(GCC) $^ -o 5 $(CXXFLAGS)
 
 clean:
-	rm *.o 1 2 3 4 5
+	rm *.o 1 2 3 4 5 *.txt
